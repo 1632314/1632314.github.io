@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Lowi on Diario de desarrollo</title>
+    <link>https://jdrt.dev/tags/lowi/</link>
+    <description>Recent content in Lowi on Diario de desarrollo</description>
+    <generator>Hugo -- 0.127.0</generator>
+    <language>es-ES</language>
+    <lastBuildDate>Sun, 14 Jan 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://jdrt.dev/tags/lowi/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Sagemcom st3686</title>
+      <link>https://jdrt.dev/posts/st3868-bridge/st3868-bridge/</link>
+      <pubDate>Sun, 14 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>https://jdrt.dev/posts/st3868-bridge/st3868-bridge/</guid>
+      <description>Configuración modem o bridge router Sagemcom st3686 Introducción Recientemente he contratado una línea de fibra de Lowi, en principio HFC (Híbrido Fibra Coaxial), pero la fibra no se encuentra por ningún lado pues me llega directamente coaxial. Lowi me ha enviado el router de Sagemcom ST3686 y no me interesa que haga de router, sino que haga de modem y mi router pfense se encargue del resto. Para ello he investigado como hacerlo y os lo explico aquí mismo.</description>
+    </item>
+  </channel>
+</rss>

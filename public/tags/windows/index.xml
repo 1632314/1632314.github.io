@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Windows on Diario de desarrollo</title>
+    <link>https://jdrt.dev/tags/windows/</link>
+    <description>Recent content in Windows on Diario de desarrollo</description>
+    <generator>Hugo -- 0.127.0</generator>
+    <language>es-ES</language>
+    <lastBuildDate>Thu, 14 Sep 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://jdrt.dev/tags/windows/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RDP Wrapper</title>
+      <link>https://jdrt.dev/posts/rdp-wrapper/rdp-wrapper/</link>
+      <pubDate>Thu, 14 Sep 2023 00:00:00 +0000</pubDate>
+      <guid>https://jdrt.dev/posts/rdp-wrapper/rdp-wrapper/</guid>
+      <description>Conexión remota multisesión en Windows | RDP Wrapper ¿Alguna vez has pensado en compartir la potencia de tu ordenador con otras personas pero no has encontrado forma fácil de hacerlo? RDP Wrapper es una es una librería de proyectos para permitir el uso concurrente de Escritorio Remoto en un solo dispositivo, pudiéndose conectar hasta 8 usuarios, aunque dependerá de tu ordenador.
+Funcionamiento normal El funcionamiento normal de escritorio remoto impide el uso concurrente incluso con distintos usuarios, quitando la sesión al usuario conectado.</description>
+    </item>
+  </channel>
+</rss>

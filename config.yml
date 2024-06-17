@@ -1,0 +1,46 @@
+baseURL: 'https://jdrt.dev/'
+languageCode: 'es-ES'
+title: 'Diario de desarrollo'
+theme: "PaperMod"
+paginate: 5
+params:
+  ## General
+  author: "Javier del Río"
+  DateFormat: "2006-01-02"
+  defaultTheme: "auto"
+
+  ## Profile
+  homeInfoParams:
+    Title: Posts sobre tecnologia
+    Content: Mira en lo que estoy trabajando 👇
+
+  ## Show Table of contents
+  showtoc: true
+  tocopen: true
+
+  ## Reading Time
+  ShowReadingTime: true
+
+  ## Other Posts suggestion below a post
+  ShowPostNavLinks: true
+
+  ## Word Count
+  ShowWordCount: true
+
+  ## Code Copy Button
+  ShowCodeCopyButtons: true
+
+  ## Share icons
+  ShowShareButtons: true
+
+  ## Breadcrumbs
+  BreadCrumbNavigation: true
+
+  ## Production
+  env: production
+
+  outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON # necessary for search
