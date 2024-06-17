@@ -44,3 +44,17 @@ params:
     - HTML
     - RSS
     - JSON # necessary for search
+
+languages:
+  es:
+    languageName: "Spanish"
+    weight: 1
+    taxonomies:
+      category: categories
+      tag: tags
+      series: series
+    menu:
+      main:
+        - name: Search
+          url: search/
+          weight: 10
