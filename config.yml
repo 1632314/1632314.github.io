@@ -2,17 +2,41 @@ baseURL: 'https://jdrt.dev/'
 languageCode: 'es-ES'
 title: 'Diario de desarrollo'
 theme: "PaperMod"
+# copyright: "El contenido de esta página le pertenece al autor. El estilo y plantilla pertenece al creador de [PaperMod y contribuidores](https://github.com/adityatelange/hugo-PaperMod/graphs/contributors)"
 paginate: 5
+
+enableInlineShortcodes: true
+enableRobotsTXT: true
+enableEmoji: true
+
 params:
   ## General
   author: "Javier del Río"
   DateFormat: "2006-01-02"
-  defaultTheme: "auto"
+  defaultTheme: "dark"
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    limit: 10 # refer: https://www.fusejs.io/api/methods.html#search
+    keys: ["title", "permalink", "summary", "content"]
 
   ## Profile
   homeInfoParams:
     Title: Posts sobre tecnologia
-    Content: Mira en lo que estoy trabajando 👇
+    Content: > 
+      Bienvenido a mi página web, donde intento ir dejando notas y guías sobre lo que voy aprendiendo, **enfasis en intentar**.
+
+      - Todas las herramientas, software y demás que utilizo son *open source*, por convicción <sub>y condición</sub>.
+
+      - Toda la página web es estática y no utiliza cookies ni tracking de ningún tipo así que no te extrañes si no hay *popups*, así era la web antes.
+
+      - Si encuentras algún post interesante tienes enlaces para compartirlo al final del mismo. Puedes copiar lo que quieras pero intenta citar. 
+
+      - Y por último, no puedes entrenar una IA con lo que hay aquí ni nada de lo que hay aquí lo ha hecho una IA.
 
   ## Show Table of contents
   showtoc: true
@@ -39,22 +63,19 @@ params:
   ## Production
   env: production
 
-  outputs:
+outputs:
   home:
     - HTML
     - RSS
     - JSON # necessary for search
 
-languages:
-  es:
-    languageName: "Spanish"
-    weight: 1
-    taxonomies:
-      category: categories
-      tag: tags
-      series: series
-    menu:
-      main:
-        - name: Search
-          url: search/
-          weight: 10
+menu:
+  main:
+    - name: Search
+      url: search/
+      weight: 10
+
+taxonomies:
+  category: categories
+  tag: tags
+  series: series

@@ -2,43 +2,43 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://jdrt.dev/</loc>
+    <loc>http://localhost:1313/</loc>
     <lastmod>2024-01-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jdrt.dev/tags/lowi/</loc>
+    <loc>http://localhost:1313/tags/lowi/</loc>
     <lastmod>2024-01-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jdrt.dev/tags/network/</loc>
+    <loc>http://localhost:1313/tags/network/</loc>
     <lastmod>2024-01-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jdrt.dev/posts/</loc>
+    <loc>http://localhost:1313/posts/</loc>
     <lastmod>2024-01-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jdrt.dev/tags/routing/</loc>
+    <loc>http://localhost:1313/tags/routing/</loc>
     <lastmod>2024-01-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jdrt.dev/posts/st3868-bridge/st3868-bridge/</loc>
+    <loc>http://localhost:1313/posts/st3868-bridge/</loc>
     <lastmod>2024-01-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jdrt.dev/tags/</loc>
+    <loc>http://localhost:1313/tags/</loc>
     <lastmod>2024-01-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jdrt.dev/tags/opensource/</loc>
+    <loc>http://localhost:1313/tags/opensource/</loc>
     <lastmod>2023-09-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jdrt.dev/posts/rdp-wrapper/rdp-wrapper/</loc>
+    <loc>http://localhost:1313/posts/rdp-wrapper/</loc>
     <lastmod>2023-09-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jdrt.dev/tags/remote/</loc>
+    <loc>http://localhost:1313/tags/remote/</loc>
     <lastmod>2023-09-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jdrt.dev/tags/windows/</loc>
+    <loc>http://localhost:1313/tags/windows/</loc>
     <lastmod>2023-09-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://jdrt.dev/search.es/</loc>
+    <loc>http://localhost:1313/search/</loc>
   </url><url>
-    <loc>https://jdrt.dev/search/</loc>
+    <loc>http://localhost:1313/categories/</loc>
   </url><url>
-    <loc>https://jdrt.dev/categories/</loc>
+    <loc>http://localhost:1313/series/</loc>
   </url>
 </urlset>

@@ -2,7 +2,7 @@
 title: "Búsqueda" # in any language you want
 layout: "search" # necessary for search
 # url: "/archive"
-description: "Página de búsqueda de artículos"
-summary: "search"
-placeholder: "🔎"
+# description: "Description for Search"
+summary: "Busca posts según el título, tags o contenido"
+placeholder: "¿A que esperas?"
 ---

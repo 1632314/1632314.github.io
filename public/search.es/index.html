@@ -11,7 +11,7 @@
 <meta name="author" content="Javier del Río">
 <link rel="canonical" href="https://jdrt.dev/search.es/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.4599eadb9eb2ad3d0a8d6827b41a8fda8f2f4af226b63466c09c5fddbc8706b7.css" integrity="sha256-RZnq256yrT0KjWgntBqP2o8vSvImtjRmwJxf3byHBrc=" rel="preload stylesheet" as="style"><link crossorigin="anonymous" rel="preload" as="fetch" href="../index.json">
-<script defer crossorigin="anonymous" src="/assets/js/search.d1362ec293cf71afa4ec91a3127b0e980d0376c9ae5046ec08f7b326b3f62e50.js" integrity="sha256-0TYuwpPPca&#43;k7JGjEnsOmA0DdsmuUEbsCPezJrP2LlA="></script>
+<script defer crossorigin="anonymous" src="/assets/js/search.d6a2c893b83642c9af14ea473274d2ba97218a84515b1da18256a85af9eb1890.js" integrity="sha256-1qLIk7g2QsmvFOpHMnTSupchioRRWx2hglaoWvnrGJA="></script>
 <link rel="icon" href="https://jdrt.dev/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://jdrt.dev/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://jdrt.dev/favicon-32x32.png">
@@ -25,34 +25,6 @@
         #theme-toggle,
         .top-link {
             display: none;
-        }
-
-    </style>
-    <style>
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --theme: rgb(29, 30, 32);
-                --entry: rgb(46, 46, 51);
-                --primary: rgb(218, 218, 219);
-                --secondary: rgb(155, 156, 157);
-                --tertiary: rgb(65, 66, 68);
-                --content: rgb(196, 196, 197);
-                --code-block-bg: rgb(46, 46, 51);
-                --code-bg: rgb(55, 56, 62);
-                --border: rgb(51, 51, 51);
-            }
-
-            .list {
-                background: var(--theme);
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-track {
-                background: 0 0;
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-thumb {
-                border-color: var(--theme);
-            }
         }
 
     </style>
@@ -120,14 +92,10 @@
 </script>
 </head>
 
-<body class="list" id="top">
+<body class="list dark" id="top">
 <script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.body.classList.add('dark');
-    } else if (localStorage.getItem("pref-theme") === "light") {
+    if (localStorage.getItem("pref-theme") === "light") {
         document.body.classList.remove('dark')
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.body.classList.add('dark');
     }
 
 </script>
@@ -160,6 +128,11 @@
             </div>
         </div>
         <ul id="menu">
+            <li>
+                <a href="https://jdrt.dev/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </header>
@@ -186,7 +159,7 @@
     </main>
     
 <footer class="footer">
-        <span>&copy; 2024 <a href="https://jdrt.dev/">Diario de desarrollo</a></span> · 
+        <span>El contenido de esta página le pertenece al autor. El estilo y plantilla pertenece al creador de <a href="https://github.com/adityatelange/hugo-PaperMod/graphs/contributors">PaperMod y contribuidores</a></span> · 
 
     <span>
         Powered by
