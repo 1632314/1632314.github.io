@@ -12,10 +12,13 @@ tags:
 # Conexión remota multisesión en Windows | RDP Wrapper
 ¿Alguna vez has pensado en compartir la potencia de tu ordenador con otras personas pero no has encontrado forma fácil de hacerlo?
 RDP Wrapper es una es una librería de proyectos para permitir el uso concurrente de Escritorio Remoto en un solo dispositivo, pudiéndose conectar hasta 8 usuarios, aunque dependerá de tu ordenador.
+
 ## Funcionamiento normal
 El funcionamiento normal de escritorio remoto impide el uso concurrente incluso con distintos usuarios, quitando la sesión al usuario conectado. Es por esto que en situaciones muy concretas nos podría interesar compartir los recursos de nuestro ordenador a múltiples usuarios o incluso múltiples sesiones de un mismo usuario😏.
+
 ## RDP Wrapper Library a.k.a La Salsa
 El programa a instalar y todo el código del que depende es abierto y lo puedes inspeccionar tu mismo en la página de [github][RDP-Wrapper] del proyecto. Allí también encontrarás información relativa a versiones cambios, problemas y más.
+
 ### Versiones de Windows Soportadas
 - Windows Vista
 - Windows 7
@@ -23,6 +26,7 @@ El programa a instalar y todo el código del que depende es abierto y lo puedes 
 - Windows 8.1
 - Windows 10
 - Windows 11
+
 ### Contenido del paquete de instalación
 El paquete `.zip` contiene los siguientes ficheros:
 
@@ -35,6 +39,7 @@ El paquete `.zip` contiene los siguientes ficheros:
 | `uninstall.bat` | Archivo .batch de desinstalación |
 | `update.bat`    | Archivo .batch de actualización |
 _Tabla extraída del github oficial_
+
 ## Instalación
 Para la instalación de RDP Wrapper lo que debemos hacer es lo siguiente:
 1. Descargar el archivo .zip de la página de [github][RDP-Wrapper]. Selecciona la última versión disponible (aunque lleva sin actualizarse desde 2017)
@@ -48,13 +53,16 @@ Para la instalación de RDP Wrapper lo que debemos hacer es lo siguiente:
 	1. Si queremos que la actualización se realice automáticamente en iniciar el ordenador entrar en la carpeta `helper` y ejecutar como administrador el archivo `.bat` correspondiente. Para deshacerlo solo deberemos ejecutar el otro.
 6. Ahora podemos ejecutar el archivo `install.bat` como administrador.
 7. Una vez instalado podemos comprobar el funcionamiento con `RDPCheck.exe` y cambiar las opciones con `RDPConf.exe`
+
 ## Configuración
 El programa `RDPConf.exe` nos indicará la configuración de escritorio remoto y parámetros a modificar. 
+
 ### *Diagnostics*
 Nos indica el estado:
 - ***Wrapper state***: si esta instalado correctamente el programa o no
 - ***Service state***: si el servicio de escritorio remoto se esta ejecutando
 - ***Listener state***: si se están esperando conexiones
+
 ### *General Settings*
 Nos permite:
 - **Habilitar el servicio**: muy típico que se nos haya olvidado habilitarlo
