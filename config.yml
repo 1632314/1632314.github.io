@@ -1,4 +1,4 @@
-baseURL: 'https://jdrt.dev/'
+baseURL: https://jdrt.dev/
 languageCode: 'es-ES'
 title: 'Diario de desarrollo'
 theme: "PaperMod"
