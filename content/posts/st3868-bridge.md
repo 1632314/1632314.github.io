@@ -21,10 +21,6 @@ ST3686 <-> Router Neutro <-> Red local
 
 Primero deberemos configurar nuestro router neutro para que tenga una IP dentro de la red por defecto 192.168.0.0/24, no usaremos DHCP ya que vamos a apagar múltiples servicios del router antes de hacer que se comporte solo como un modem.
 
-![configuración IP estática]()
-
 Una vez tengamos configurada la IP estática en el router podremos acceder desde otra red local si las reglas de firewall lo permiten. Debemos acceder a la IP por defecto [192.168.0.1][ST3686DefaultIP]. Una vez aquí desactivaremos el servicio de DHCP, el WiFi y todos servicios de compartición de ficheros que no hacen falta. Para ello debemos activar el modo experto en las opciones que se muestra arriba a la derecha.
-
-![Desactivación DHCP]()
 
 Una vez hecho esto podemos activar el modo bridge o modem en la configuración. Una vez hagamos esto la IP del router cambiará a [192.168.100.1][ST3686ModemIP] y asignará la IP mediante DHCP, con lo que debemos cambiar la configuración de la interfaz conectada al modem (porque ahora es efectivamente un modem) para que reciba la IP mediante DHCP.
