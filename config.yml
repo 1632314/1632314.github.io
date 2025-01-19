@@ -1,5 +1,5 @@
 baseURL: https://jdrt.dev/
-languageCode: 'es-ES'
+defaultContentLanguage: es
 title: 'Diario de desarrollo'
 theme: "PaperMod"
 # copyright: "El contenido de esta página le pertenece al autor. El estilo y plantilla pertenece al creador de [PaperMod y contribuidores](https://github.com/adityatelange/hugo-PaperMod/graphs/contributors)"
@@ -11,9 +11,9 @@ enableEmoji: true
 
 params:
   ## General
-  author: "Javier del Río"
+  author: Javier del Río
   DateFormat: "2006-01-02"
-  defaultTheme: "dark"
+  defaultTheme: dark
   fuseOpts:
     isCaseSensitive: false
     shouldSort: true
@@ -71,7 +71,7 @@ outputs:
 
 menu:
   main:
-    - name: Search
+    - name: Búsqueda
       url: search/
       weight: 10
 
