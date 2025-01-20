@@ -34,6 +34,8 @@ Si no tienes ningún workflow creado tienes la opción de seleccionar una planti
 
 Una vez seleccionada podemos hacer un *commit* directamente pues no vamos a tocar nada de aquí. Al menos yo no.
 
+Puedes aprovechar para modificar el fichero `.gitignore` para añadir una nueva línea con `/public/`, esto evitará que tus pruebas locales se suban al repositorio.
+
 ## Hugo
 Ahora necesitamos instalar Hugo. Hugo es un renderizador de páginas web. ¿Esto que es? Pues es un programa que recoge una serie de ficheros que por si mismos no son una página web y genera unos que si lo son. En nuestro caso Hugo coge unos ficheros en markdown y los transforma a html. 
 
@@ -60,3 +62,44 @@ Si no te funciona puedes revisar la [documentación de hugo](https://gohugo.io/c
 
 
 ### Creación del sitio
+Antes de seguir deberías tener instalado git, puedes mirar en la [página oficial](https://git-scm.com/downloads) como hacerlo para tu sistema operativo, pero me extraña que no lo tengas ya.
+
+Para crear el sitio primero debemos crear el repositorio de git en nuestro ordenador. Para esto es recomendable un IDE y nada de terminal. En mi caso es Visual Studio Code. Conectamos nuestra cuenta de GitHub. Y realizamos un *Git Clone* del repositorio que hemos creado antes. El directorio donde lo hagas da igual, pero un sitio del que te acuerdes, no lo pongas en descargas.
+
+Una vez clonado el repositorio deberíamos tener poco nada y menos. En esta ubicación, donde esta el contenido del repositorio puedes crear la estructura de carpetas de Hugo utilizando:
+
+```shell
+hugo new site .
+```
+
+Ahora debes seleccionar un estilo o tema para tu página web, puedes ver una selección de ellos en esta [página web](https://themes.gohugo.io/) que los agrupa con capturas de pantalla. 
+
+Una vez hecho esto podemos utilizar una funcionalidad de git tan increíble como desconocida: los submodulos. Un repositorio git dentro de otro. Una vez tengas el estilo decidido lo puedes incluir a tu repositorio mediante:
+
+```shell
+git submodule add https://github.com/theNewDynamic/gohugo-theme-ananke.git themes/ananke
+```
+
+Y para acabar deberás modificar el archivo de configuración de hugo `hugo.toml` para cambiar el tema. 
+
+```toml
+theme = 'anake'
+```
+
+Una vez hecho esto deberías poder ejecutar `hugo server` para iniciar un servidor web con el contenido que tengas. 
+
+Para ver los pasos más en detalle tienes una [guía de hugo](https://gohugo.io/getting-started/quick-start/). Para gran parte de la configuración de tu web deberás utilizar la documentación que provea el creador del tema. 
+
+### Creación de contenido
+Para crear un nuevo post tienes dos opciones, crear el fichero manualmente o ejecutar el comando `hugo new content /content/posts/my-post.md`. Aquí podrás utilizar las reglas de [sintaxis de markdown](https://www.markdownguide.org/basic-syntax/) para redactar artículos. Puedes incluir metadatos del artículo en la cabezera:
+
+```markdown
++++
+title = 'My First Post'
+date = 2024-01-14T07:07:07+01:00
+draft = true
++++
+```
+
+### Refrescar la web
+Todo lo que tienes que hacer 
