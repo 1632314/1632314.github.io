@@ -1,7 +1,7 @@
 ---
 title: Web GitHub
 date: 2025-01-19
-draft: false
+draft: true
 tags:
   - GitHub
   - web
@@ -11,7 +11,7 @@ tags:
 ## Introducción
 Siempre he querido tener una página web sencillita donde ir posteando **fácilmente** (enfasis en esto) artículos. Hoy en día es más fácil que antaño, pero se deben tener en cuenta muchas cosas que no són evidentes como certificados SSL, dominio o hosting. Por suerte tenemos una forma de no tener que lidiar con ello a través de GitHub. Para ello utilizaremos un renderizador de páginas web estáticas, en mi caso es Hugo, pero se pueden utilizar otros sin problema. También se puede añadir el paso opcional de utilizar un dominio propio, la única parte que cuesta dinero, pero al cabo del año no es nada.
 
-Para hacer un adelanto de lo que será, el workflow será el siguiente. Tendremos un repositorio que contendrá nuestras páginas web. En este repositorio subiremos y modificaremos los *posts* o páginas que querramos. Una vez subido a GitHub, a través	de GitHub Actions, se ejecutará un *script* para renderizar y subir nuestra página web a GitHub Pages, de manera completamente automática. Hay muchas tecnologías implicadas, pero el resultado final es algo muy cómodo (solo si eres programador😅). Para personas que nunca han programado esto debe ser complicado y poco intuitivo. 
+Para hacer un adelanto de lo que será. El workflow será el siguiente. Tendremos un repositorio que contendrá nuestras páginas web. En este repositorio subiremos y modificaremos los *posts* o páginas que querramos. Una vez subido a GitHub, a través	de GitHub Actions, se ejecutará un *script* para renderizar y subir nuestra página web a GitHub Pages, de manera completamente automática. Hay muchas tecnologías implicadas, pero el resultado final es algo muy cómodo (solo si eres programador😅). Para personas que nunca han programado esto debe ser complicado y poco intuitivo. 
 
 ## Repositorio de GitHub
 ### Creación
@@ -22,7 +22,41 @@ A la hora de crear el repositorio es conveniente ponerle el nombre de `<tu nombr
 ![Pantalla de creación de nuevo repositorio en GitHub](new-repository-github-page-censored.PNG "Utiliza la imagen como guia")
 
 ### Workflow 
-Aunque no tengamos nada publicado en GitHub podemos dejar esto listo para más adelante. Vamos a aprovechar la funcionalidad de GitHub Actions para ejecutar un *script* cada vez que publiquemos en la rama principal que se encargue de publicar los cambios. Para cambiar el funcionamiento de la publicación vamos a `Ajustes > Pages` desde nuestro repositorio. Una vez allí marcamos como fuente GitHub Actions. Si no tienes ningún workflow creado 
+Aunque no tengamos nada publicado en GitHub podemos dejar esto listo para más adelante. Vamos a aprovechar la funcionalidad de GitHub Actions para ejecutar un *script* cada vez que publiquemos en la rama principal que se encargue de publicar los cambios. 
+
+Para cambiar el funcionamiento de la publicación vamos a `Ajustes > Pages` desde nuestro repositorio. Una vez allí marcamos como fuente GitHub Actions.  
 
 ![Selecciona GitHub Actions como forma de publicación](select-build-github.png)
 
+Si no tienes ningún workflow creado tienes la opción de seleccionar una plantilla. En mi caso busco la plantilla de Hugo.
+
+![Búsqueda plantilla hugo workflow github](hugo-workflow-github.png)
+
+Una vez seleccionada podemos hacer un *commit* directamente pues no vamos a tocar nada de aquí. Al menos yo no.
+
+## Hugo
+Ahora necesitamos instalar Hugo. Hugo es un renderizador de páginas web. ¿Esto que es? Pues es un programa que recoge una serie de ficheros que por si mismos no son una página web y genera unos que si lo son. En nuestro caso Hugo coge unos ficheros en markdown y los transforma a html. 
+
+### Instalación
+Para instalarlo la forma más sencilla que se me ocurre es a través del terminal. Si estas en Linux debería ser tan fácil como 
+```bash
+sudo apt install hugo
+``` 
+o con el gestor de paquetes que te toque. Si estas en MAC tendrás que utilizar el gestor de paquetes brew.
+
+```shell
+brew install hugo
+```
+
+En Windows también tenemos la opción de utilizar un gestor de paquetes que es `winget`. Si vas al terminal y escribes 
+
+```
+winget install Hugo.Hugo.Extended
+```
+
+debería instalarse. 
+
+Si no te funciona puedes revisar la [documentación de hugo](https://gohugo.io/categories/installation/).
+
+
+### Creación del sitio
