@@ -101,5 +101,24 @@ draft = true
 +++
 ```
 
-### Refrescar la web
-Todo lo que tienes que hacer 
+### Actualizar la web
+Todo lo que tienes que hacer es hacer un push de tu git local a github. Una vez hecho esto se desencadenará el workflow que hemos definido. Y podrás verlo ejecutandose en la página de GitHub en la pestaña de Actions.  
+
+![Workflow de GitHub Actions](github-actions-workflow.png)
+
+Puedes seleccionar *build* o *deploy* para ver las partes ejecutadas y su resultado. Muy conveniente si se da algún error.
+
+Antes de subir el contenido a la web podeis probar la ejecución en local utilizando el comando:
+
+```sh
+hugo server -D
+```
+
+Esto renderizará la web y podreis acceder a ella localmente tal y como se veria una vez colgada. Si actualizais un fichero mientras se ejecuta el servidor local actualizará la web automáticamente. Facilita muchisimo el desarrollo pues no teneis que esperar a que se suba a github ni nada. 
+
+## Dominio Propio
+Si quereis acceder a vuestra web todo lo que teneis que acceder es ir a `<yourname>.github.io` si le has puesto otro nombre al repositorio que no sea el indicado debereis añadir `\repository-name` al enlace.
+
+Pero si queremos acceder a través de un dominio propio aun quedan unos cuantos pasos. Primero deberemos tener un dominio adquirido, en mi caso [jdrt.dev](https://jdrt.dev). Os recomiendo adquirir dominios con nuevos TLD (*Top Level Domain*) pues podeis adquirir dominios muy cortos, si eres desarrollador puedes adquirir un `.dev`. Para adquirirlo en mi caso utilizo Cloudflare pues puedo hacer cambios de DNS directamente, pero si os quereis hacer con un dominio barato podeis adquirirlo a través de [Namecheap](https://www.namecheap.com) y luego configurar los DNS de Cloudflare.
+
+
