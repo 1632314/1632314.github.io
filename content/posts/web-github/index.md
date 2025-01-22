@@ -1,7 +1,7 @@
 ---
 title: Web GitHub
 date: 2025-01-19
-draft: true
+draft: false
 tags:
   - GitHub
   - web
@@ -119,6 +119,63 @@ Esto renderizará la web y podreis acceder a ella localmente tal y como se veria
 ## Dominio Propio
 Si quereis acceder a vuestra web todo lo que teneis que acceder es ir a `<yourname>.github.io` si le has puesto otro nombre al repositorio que no sea el indicado debereis añadir `\repository-name` al enlace.
 
-Pero si queremos acceder a través de un dominio propio aun quedan unos cuantos pasos. Primero deberemos tener un dominio adquirido, en mi caso [jdrt.dev](https://jdrt.dev). Os recomiendo adquirir dominios con nuevos TLD (*Top Level Domain*) pues podeis adquirir dominios muy cortos, si eres desarrollador puedes adquirir un `.dev`. Para adquirirlo en mi caso utilizo Cloudflare pues puedo hacer cambios de DNS directamente, pero si os quereis hacer con un dominio barato podeis adquirirlo a través de [Namecheap](https://www.namecheap.com) y luego configurar los DNS de Cloudflare.
+Pero si queremos acceder a través de un dominio propio aun quedan unos cuantos pasos. Primero deberemos tener un dominio adquirido. El mio es [jdrt.dev](https://jdrt.dev), el dominio que estas viendo en la barra del navegador. Os recomiendo adquirir dominios con nuevos TLD (*Top Level Domain*) pues podeis adquirir dominios muy cortos, si eres desarrollador te recomiendo un `.dev`. Para adquirirlo utilizo Cloudflare pues puedo hacer cambios de DNS directamente, pero si os quereis hacer con un dominio barato podeis adquirirlo a través de [Namecheap](https://www.namecheap.com) y luego configurar los DNS de Cloudflare.
 
+### Configuración
+Para configurar vuestro dominio GitHub tiene una [guía](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages) que esta bien explicada. Yo aquí te hago un resumen y te pongo ejemplos por si te ayuda. 
 
+#### Si utilizais un subdominio
+Para el caso de un subdominio, tipo `sub.dominio.com`, pues todo lo que teneis que hacer es añadir un CNAME `record` a vuestros registros de DNS, en Cloudflare teneis esta [guia](https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/). Para otros proveedores tendreis que hacer una búsqueda en internet, no debería ser muy complicado. 
+
+El CNAME (*Canonical Name*), todo lo que hace es como una redirección si lo quieres pensar así. Todo lo que teneis que indicar el subdominio que querais utilizar y el subdominio que os da GitHub. 
+
+![Registro DNS CNAME de www a github.io](dns-record-github-pages-cname.PNG)
+
+Una vez hecho debeis ir a la página de vuestro repositorio en GitHub y añadir el dominio que vayais a utilizar: Settings > Pages > Custom domain:
+
+![Cuadro de dominio propio en los ajustes del repositorio de GitHub](custom-domain-github.png)
+
+### Si utilizas el dominio
+Para el caso del *apex* o el dominio tal cual, tipo `dominio.com` las cosas cambian. Para añadirlo debereis añadir unos registros A y AAAA (si quereis IPv6) a vuestro proveedor de DNS para las siguientes IPs:
+
+IPv4
+```
+185.199.108.153
+185.199.109.153
+185.199.110.153
+185.199.111.153
+```
+
+IPv6
+```
+2606:50c0:8000::153
+2606:50c0:8001::153
+2606:50c0:8002::153
+2606:50c0:8003::153
+```
+
+Una vez añadidos los registros DNS añadimos el dominio propio al repositorio de GitHub como se indica en el [caso de subdominio](#si-utilizais-un-subdominio).
+
+### Modificación del workflow
+Si ahora intentais acceder a la página web seguramente no os funcione. El workflow que hemos utilizado tiene una línea de código que indica que el dominio a utilizar y no coincide con el que estamos utilizando. Para arreglarlo tienes dos opciones:
+- añade en el fichero de `config` de Hugo la línea `baseURL` con tu dominio y eliminia la línea `--baseURL ...` del workflow de `hugo.yml`
+- modifica la línea del workflow e indica tu dominio `--baseURL "https://jdrt.dev/"`
+
+Con esto ya deberías tener tu página vivita y coleando.
+
+### Incrementa la seguridad
+Puede pasar que si dejas los registros DNS y por lo que sea borras el repositorio alguien pueda subir una página a tu dominio. Esto se conoce como `Domain Hijack` y es una práctica habitual entre hackers que se puede hacer hasta de forma automática por bots. GitHub nos proporciona una manera de protegernos. 
+
+Si vamos a ajustes de nuestro perfil y luego a Pages podemos verficar nuestro dominio. Debemos indicarlo y luego añadir un registro TXT en nuestro proveedor de DNS con un nombre y un contenido determinado. 
+
+![Verificando dominio propio en GitHub Pages](add-custom-domain-github.png)
+
+![Registro TXT a añadir para verificar dominio en GitHub pages](dns-txt-record-to-verify-domain.png)
+
+Este dominio no es mio así que no puedo añadir ningún registro al DNS, tampoco intentes robarmelo 😜. 
+
+Lo último que podemos hacer es forzar HTTPS. Si vamos a la configuración del repositorio, donde se añade el dominio propio hay una casilla para forzar el HTTPS. Este cambio tarda un tiempo, si al cabo de unos días hay algo de la web que no funciona es porque hay elementos que tratan de utilizar HTTP y no van a cargar. 
+
+## Conclusión
+
+Y con esto ya estaria. Espero que te sirva o al menos te haya descubierto esta posibilidad de hostear tus propias páginas webs. Puedes utilizar múltiples programas de renderizado de webs estáticas e incluso puedes añadir elementos como google analytics o formularios que utilizen servidores de terceros. Así que aunque sea estática la puedes llenar de toda la funcionalidad que quieras. 
