@@ -135,7 +135,7 @@ Una vez hecho debeis ir a la página de vuestro repositorio en GitHub y añadir 
 
 ![Cuadro de dominio propio en los ajustes del repositorio de GitHub](custom-domain-github.png)
 
-### Si utilizas el dominio
+#### Si utilizas el dominio
 Para el caso del *apex* o el dominio tal cual, tipo `dominio.com` las cosas cambian. Para añadirlo debereis añadir unos registros A y AAAA (si quereis IPv6) a vuestro proveedor de DNS para las siguientes IPs:
 
 IPv4
