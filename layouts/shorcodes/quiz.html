@@ -1,0 +1,298 @@
+<div id="quiz-app-container">
+    <style>
+        /* Encapsulamos todo bajo el ID para evitar conflictos con Hugo */
+        #quiz-app-container {
+            --q-bg: #f0f2f5; --q-card: #ffffff; --q-text: #2c3e50;
+            --q-primary: #4a90e2; --q-success: #2ecc71; --q-danger: #e74c3c;
+            --q-border: #dcdde1; --q-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: var(--q-text);
+            max-width: 900px;
+            margin: 2rem auto;
+            line-height: 1.6;
+        }
+
+        #quiz-app-container[data-theme="dark"] {
+            --q-bg: #1a1a1a; --q-card: #2d2d2d; --q-text: #e0e0e0;
+            --q-border: #444; --q-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        #quiz-app-container .card { background: var(--q-card); padding: 2rem; border-radius: 15px; box-shadow: var(--q-shadow); margin-bottom: 1.5rem; }
+        #quiz-app-container .hidden { display: none !important; }
+        
+        #quiz-app-container .btn { padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-block; text-decoration: none; text-align: center; }
+        #quiz-app-container .btn-primary { background: var(--q-primary); color: white; }
+        #quiz-app-container .btn-success { background: var(--q-success); color: white; width: 100%; }
+        #quiz-app-container .btn-danger { background: var(--q-danger); color: white; }
+        
+        #quiz-app-container .upload-area { border: 3px dashed var(--q-border); padding: 2rem; text-align: center; border-radius: 12px; cursor: pointer; background: rgba(0,0,0,0.02); }
+        #quiz-app-container .upload-area.drag-over { border-color: var(--q-primary); background: rgba(74, 144, 226, 0.1); }
+        
+        #quiz-app-container .stats-bar { position: sticky; top: 0; z-index: 10; background: var(--q-card); display: flex; justify-content: space-between; padding: 15px 20px; border-bottom: 2px solid var(--q-primary); margin-bottom: 20px; border-radius: 0 0 10px 10px; }
+        #quiz-app-container .option-label { display: flex; align-items: center; padding: 12px; margin: 8px 0; border: 1px solid var(--q-border); border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+        #quiz-app-container .option-label:hover { background: rgba(0,0,0,0.02); }
+        #quiz-app-container .correct-feedback { border: 2.5px solid var(--q-success) !important; background: rgba(46, 204, 113, 0.1); }
+        #quiz-app-container .wrong-feedback { border: 2.5px solid var(--q-danger) !important; background: rgba(231, 76, 60, 0.1); }
+        #quiz-app-container .explanation { background: rgba(74, 144, 226, 0.1); padding: 10px; border-radius: 6px; margin-top: 10px; border-left: 4px solid var(--q-primary); font-size: 0.9rem; }
+        #quiz-app-container .question-image { max-width: 100%; border-radius: 8px; margin: 10px 0; display: block; }
+        #quiz-app-container pre { background: #222; color: #eee; padding: 10px; border-radius: 5px; font-size: 0.8rem; overflow-x: auto; }
+        #quiz-app-container .history-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
+        #quiz-app-container .history-table th, #quiz-app-container .history-table td { text-align: left; padding: 8px; border-bottom: 1px solid var(--q-border); }
+    </style>
+
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+        <button class="btn btn-primary" onclick="toggleQuizTheme()">🌓 Modo Oscuro</button>
+    </div>
+
+    <section id="q-view-setup" class="card">
+        <details style="margin-bottom: 1.5rem;">
+            <summary style="cursor:pointer; color: var(--q-primary); font-weight: bold;">ℹ️ Ver formato JSON aceptado</summary>
+            <pre>
+{
+  "tema": "Título del Test",
+  "preguntas": [{
+    "pregunta": "¿Texto de la pregunta?",
+    "opciones": ["Opción A", "Opción B", "Opción C"],
+    "correcta": 1,             // Índice (0, 1, 2...)
+    "multiple": false,        // (Opcional) true si hay varias correctas
+    "imagen": "URL",           // (Opcional)
+    "explicacion": "Texto"    // (Opcional)
+  }]
+}</pre>
+        </details>
+
+        <h3>1. Cargar Banco de Preguntas</h3>
+        <div id="q-drop-zone" class="upload-area">
+            <p>Arrastra archivos .json aquí o haz clic</p>
+            <input type="file" id="q-fileInput" multiple accept=".json" class="hidden">
+        </div>
+
+        <div id="q-setup-options" class="hidden">
+            <div id="q-bank-list" style="margin: 1.5rem 0;"></div>
+            <hr>
+            <h3>2. Configuración</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 1rem;">
+                <div>
+                    <label>Evaluación:</label>
+                    <select id="q-eval-mode" onchange="toggleQuizEvalUI()" style="width:100%; padding: 5px;">
+                        <option value="threshold">Apto / No Apto</option>
+                        <option value="scoring">Puntuación (Oposición)</option>
+                    </select>
+                </div>
+                <div>
+                    Tiempo (min): <input type="number" id="q-time-limit" value="0" style="width: 50px;">
+                </div>
+            </div>
+
+            <div id="q-ui-threshold" class="card" style="background: rgba(0,0,0,0.02);">
+                Errores permitidos: <input type="number" id="q-max-errors" value="3" style="width: 40px;">
+            </div>
+            <div id="q-ui-scoring" class="card hidden" style="background: rgba(0,0,0,0.02);">
+                Acierto: +<input type="number" id="q-pts-right" value="1" step="0.1" style="width:45px"> | 
+                Fallo: -<input type="number" id="q-pts-wrong" value="0.33" step="0.01" style="width:45px">
+            </div>
+
+            <div style="margin: 1rem 0; font-size: 0.9rem;">
+                <label><input type="checkbox" id="q-sudden-death"> 💀 Muerte Súbita</label> &nbsp;
+                <label><input type="checkbox" id="q-instant-feedback"> ⚡ Feedback Inmediato</label>
+            </div>
+            <button class="btn btn-success" onclick="startQuizMaster()">EMPEZAR EXAMEN</button>
+        </div>
+
+        <div id="q-history-area" style="margin-top: 2rem;">
+            <h4>Últimos resultados</h4>
+            <table class="history-table">
+                <tbody id="q-history-body"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="q-view-quiz" class="hidden">
+        <div class="stats-bar">
+            <div id="q-timer">Tiempo: --:--</div>
+            <div id="q-progress">Examen en curso</div>
+        </div>
+        <div id="q-content"></div>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button class="btn btn-success" style="flex: 2;" onclick="finishQuizMaster()">Corregir Examen</button>
+            <button class="btn btn-danger" style="flex: 1;" onclick="abortQuizMaster()">Abandonar</button>
+        </div>
+    </section>
+
+    <section id="q-view-results" class="card hidden" style="text-align: center;">
+        <div id="q-star-display" style="font-size: 3rem;"></div>
+        <h2 id="q-result-title"></h2>
+        <p id="q-result-desc"></p>
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 2rem;">
+            <button class="btn btn-primary" onclick="backToQuizSetup()">Volver</button>
+            <button class="btn btn-success" onclick="exportQuizTxt()">📥 Descargar Informe TXT</button>
+        </div>
+    </section>
+
+    <script>
+        let qBank = []; let qActive = []; let qTimer = null; let qTimeLeft = 0; let qResultsData = [];
+        let qHistory = JSON.parse(localStorage.getItem('quiz_h_data') || '[]');
+
+        document.addEventListener('DOMContentLoaded', updateQuizHistoryUI);
+
+        const qDrop = document.getElementById('q-drop-zone');
+        const qFile = document.getElementById('q-fileInput');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(e => qDrop.addEventListener(e, x => { x.preventDefault(); x.stopPropagation(); }));
+        qDrop.addEventListener('dragover', () => qDrop.classList.add('drag-over'));
+        qDrop.addEventListener('dragleave', () => qDrop.classList.remove('drag-over'));
+        qDrop.addEventListener('drop', x => { qDrop.classList.remove('drag-over'); handleQuizFiles(x.dataTransfer.files); });
+        qDrop.onclick = () => qFile.click();
+        qFile.onchange = (e) => handleQuizFiles(e.target.files);
+
+        async function handleQuizFiles(files) {
+            for (let f of files) {
+                try {
+                    const j = JSON.parse(await f.text());
+                    qBank.push({ t: j.tema || f.name, q: j.preguntas });
+                } catch(e) {}
+            }
+            renderQuizBank();
+        }
+
+        function renderQuizBank() {
+            const l = document.getElementById('q-bank-list');
+            l.innerHTML = '<strong>Temas:</strong>';
+            qBank.forEach((b, i) => {
+                l.innerHTML += `<div style="display:flex; justify-content:space-between; margin:5px 0;">
+                    <span>${b.t} (${b.q.length})</span>
+                    <input type="number" class="q-val" data-idx="${i}" value="5" style="width:40px;">
+                </div>`;
+            });
+            document.getElementById('q-setup-options').classList.remove('hidden');
+        }
+
+        function startQuizMaster() {
+            qActive = [];
+            document.querySelectorAll('.q-val').forEach(inp => {
+                const bIdx = inp.dataset.idx;
+                const n = Math.min(inp.value, qBank[bIdx].q.length);
+                const sel = [...qBank[bIdx].q].sort(() => 0.5 - Math.random()).slice(0, n);
+                sel.forEach(q => {
+                    const cI = Array.isArray(q.correcta) ? q.correcta : [q.correcta];
+                    const o = q.opciones.map((text, i) => ({ text, isC: cI.includes(i) })).sort(() => 0.5 - Math.random());
+                    qActive.push({ ...q, oM: o });
+                });
+            });
+            if(!qActive.length) return;
+            qActive.sort(() => 0.5 - Math.random());
+            const mins = parseInt(document.getElementById('q-time-limit').value);
+            if(mins > 0) { qTimeLeft = mins * 60; qTimer = setInterval(updateQuizClock, 1000); }
+            renderQuizContent();
+            document.getElementById('q-view-setup').classList.add('hidden');
+            document.getElementById('q-view-quiz').classList.remove('hidden');
+        }
+
+        function updateQuizClock() {
+            qTimeLeft--;
+            const m = Math.floor(qTimeLeft/60), s = qTimeLeft%60;
+            document.getElementById('q-timer').innerText = `Tiempo: ${m}:${s<10?'0':''}${s}`;
+            if(qTimeLeft <= 0) finishQuizMaster();
+        }
+
+        function renderQuizContent() {
+            const c = document.getElementById('q-content'); c.innerHTML = '';
+            qActive.forEach((q, i) => {
+                const d = document.createElement('div'); d.className = 'card'; d.id = `qc-${i}`;
+                d.innerHTML = `<p><strong>${i+1}. ${q.pregunta}</strong></p>
+                    ${q.imagen ? `<img src="${q.imagen}" class="question-image">`:''}
+                    ${q.oM.map((o, oi) => `<label class="option-label" id="ql-${i}-${oi}"><input type="${q.multiple?'checkbox':'radio'}" name="qn${i}" value="${oi}" onchange="checkQInstant(${i})"> ${o.text}</label>`).join('')}
+                    <div id="qe-${i}" class="explanation hidden">${q.explicacion?'💡 '+q.explicacion:''}</div>`;
+                c.appendChild(d);
+            });
+        }
+
+        function checkQInstant(i) {
+            if(!document.getElementById('q-instant-feedback').checked || qActive[i].multiple) return;
+            const inps = document.querySelectorAll(`input[name="qn${i}"]`);
+            const sel = Array.from(inps).find(x => x.checked);
+            if(!sel) return;
+            inps.forEach(x => x.disabled = true);
+            const isC = qActive[i].oM[sel.value].isC;
+            document.getElementById(`qc-${i}`).style.borderLeft = isC ? "6px solid var(--q-success)" : "6px solid var(--q-danger)";
+            if(qActive[i].explicacion) document.getElementById(`qe-${i}`).classList.remove('hidden');
+            if(!isC && document.getElementById('q-sudden-death').checked) { alert("💀 Muerte Súbita!"); finishQuizMaster(); }
+        }
+
+        function abortQuizMaster() { if(confirm("¿Abandonar examen?")) { clearInterval(qTimer); backToQuizSetup(); } }
+
+        function finishQuizMaster() {
+            clearInterval(qTimer);
+            let h = 0, f = 0; qResultsData = [];
+            qActive.forEach((q, i) => {
+                const s = Array.from(document.querySelectorAll(`input[name="qn${i}"]:checked`)).map(x => parseInt(x.value));
+                const cI = q.oM.map((o, idx) => o.isC ? idx : null).filter(x => x !== null);
+                const isC = JSON.stringify(s.sort()) === JSON.stringify(cI.sort());
+                if(isC) h++; else f++;
+                if(q.explicacion) document.getElementById(`qe-${i}`).classList.remove('hidden');
+                q.oM.forEach((o, oi) => {
+                    const l = document.getElementById(`ql-${i}-${oi}`);
+                    if(o.isC) l.classList.add('correct-feedback');
+                    if(s.includes(oi) && !o.isC) l.classList.add('wrong-feedback');
+                });
+                qResultsData.push({ q: q.pregunta, u: s.map(x => q.oM[x].text), c: q.oM.filter(x => x.isC).map(x => x.text), ok: isC });
+            });
+            saveQuizH(h, f); showQuizFinal(h, f);
+        }
+
+        function showQuizFinal(h, f) {
+            const m = document.getElementById('q-eval-mode').value;
+            let t = "", d = "";
+            if(m === 'threshold') {
+                const max = parseInt(document.getElementById('q-max-errors').value);
+                const ok = f <= max; t = ok ? "✅ APTO" : "❌ NO APTO"; d = `Errores: ${f} (Máx: ${max})`;
+            } else {
+                const sc = (h * parseFloat(document.getElementById('q-pts-right').value)) - (f * parseFloat(document.getElementById('q-pts-wrong').value));
+                t = sc.toFixed(2) + " Puntos"; d = `${h} Bien / ${f} Mal`;
+            }
+            const p = (h/qActive.length)*100;
+            document.getElementById('q-star-display').innerText = p>=90?'⭐⭐⭐':p>=70?'⭐⭐☆':p>=50?'⭐☆☆':'☆☆☆';
+            document.getElementById('q-result-title').innerText = t;
+            document.getElementById('q-result-desc').innerText = d;
+            document.getElementById('q-view-quiz').classList.add('hidden');
+            document.getElementById('q-view-results').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function saveQuizH(h, f) {
+            qHistory.unshift({ d: new Date().toLocaleDateString(), r: `${h}/${h+f}` });
+            localStorage.setItem('quiz_h_data', JSON.stringify(qHistory.slice(0, 5)));
+            updateQuizHistoryUI();
+        }
+
+        function updateQuizHistoryUI() {
+            document.getElementById('q-history-body').innerHTML = qHistory.map(x => `<tr><td>${x.d}</td><td>${x.r}</td></tr>`).join('');
+        }
+
+        function exportQuizTxt() {
+            let t = "INFORME\n\n";
+            qResultsData.forEach((r, i) => t += `${i+1}. ${r.q}\n   ${r.ok?'OK':'FALLO'}\n   Tuya: ${r.u.join(', ')}\n   Correcta: ${r.c.join(', ')}\n\n`);
+            const b = new Blob([t], { type: 'text/plain' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = "informe.txt"; a.click();
+        }
+
+        function toggleQuizTheme() {
+            const c = document.getElementById('quiz-app-container');
+            const isD = c.getAttribute('data-theme') === 'dark';
+            c.setAttribute('data-theme', isD ? 'light' : 'dark');
+        }
+
+        function toggleQuizEvalUI() {
+            const m = document.getElementById('q-eval-mode').value;
+            document.getElementById('q-ui-threshold').classList.toggle('hidden', m !== 'threshold');
+            document.getElementById('q-ui-scoring').classList.toggle('hidden', m !== 'scoring');
+        }
+
+        function backToQuizSetup() {
+            document.getElementById('q-view-results').classList.add('hidden');
+            document.getElementById('q-view-quiz').classList.add('hidden');
+            document.getElementById('q-view-setup').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+    </script>
+</div>
