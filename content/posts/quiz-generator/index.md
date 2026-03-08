@@ -1,6 +1,10 @@
 ---
-title: "Mi Proyecto: Generador de Exámenes"
+title: "Generador de Exámenes tipo test"
 date: 2026-03-08
+draft: false
+tags:
+  - tool
+  - web
 ---
 
 He hecho una herramienta de generación de éxamenes tipo test. Permite generar examenes a partir de jsons correctamente formateados, eligiendo el número de preguntas que seleccionar, tiene temporizador, historial, etc. La he creado para estudiar para un examen y os puede ser útil. 
