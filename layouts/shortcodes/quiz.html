@@ -1,135 +1,132 @@
 <div id="quiz-app-container">
     <style>
-        /* Encapsulamos todo bajo el ID para evitar conflictos con Hugo */
+        /* 1. ANCHO COMPLETO (Breakout) */
         #quiz-app-container {
             --q-bg: #f0f2f5; --q-card: #ffffff; --q-text: #2c3e50;
             --q-primary: #4a90e2; --q-success: #2ecc71; --q-danger: #e74c3c;
             --q-border: #dcdde1; --q-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            
+            /* Esta lógica permite que el div se expanda al ancho de la ventana 
+               aunque el post sea estrecho */
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            
+            padding: 2rem;
+            box-sizing: border-box;
             font-family: 'Segoe UI', system-ui, sans-serif;
             color: var(--q-text);
-            max-width: 900px;
-            margin: 2rem auto;
             line-height: 1.6;
         }
 
-        #quiz-app-container[data-theme="dark"] {
+        /* Limitador interno para que el contenido no pegue a los bordes en pantallas gigantes */
+        #quiz-app-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* 2. SINCRONIZACIÓN MODO OSCURO 
+           Cambiamos los selectores para que dependan de la clase de tu Portfolio.
+           Hugo suele usar 'dark' o 'dark-mode' en el <body> o <html>.
+        */
+        body.dark #quiz-app-container,
+        body.dark-mode #quiz-app-container,
+        html[data-theme='dark'] #quiz-app-container {
             --q-bg: #1a1a1a; --q-card: #2d2d2d; --q-text: #e0e0e0;
             --q-border: #444; --q-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
 
         #quiz-app-container .card { background: var(--q-card); padding: 2rem; border-radius: 15px; box-shadow: var(--q-shadow); margin-bottom: 1.5rem; }
         #quiz-app-container .hidden { display: none !important; }
-        
-        #quiz-app-container .btn { padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-block; text-decoration: none; text-align: center; }
+        #quiz-app-container .btn { padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-block; }
         #quiz-app-container .btn-primary { background: var(--q-primary); color: white; }
         #quiz-app-container .btn-success { background: var(--q-success); color: white; width: 100%; }
         #quiz-app-container .btn-danger { background: var(--q-danger); color: white; }
-        
         #quiz-app-container .upload-area { border: 3px dashed var(--q-border); padding: 2rem; text-align: center; border-radius: 12px; cursor: pointer; background: rgba(0,0,0,0.02); }
-        #quiz-app-container .upload-area.drag-over { border-color: var(--q-primary); background: rgba(74, 144, 226, 0.1); }
-        
         #quiz-app-container .stats-bar { position: sticky; top: 0; z-index: 10; background: var(--q-card); display: flex; justify-content: space-between; padding: 15px 20px; border-bottom: 2px solid var(--q-primary); margin-bottom: 20px; border-radius: 0 0 10px 10px; }
-        #quiz-app-container .option-label { display: flex; align-items: center; padding: 12px; margin: 8px 0; border: 1px solid var(--q-border); border-radius: 8px; cursor: pointer; transition: background 0.2s; }
-        #quiz-app-container .option-label:hover { background: rgba(0,0,0,0.02); }
+        #quiz-app-container .option-label { display: flex; align-items: center; padding: 12px; margin: 8px 0; border: 1px solid var(--q-border); border-radius: 8px; cursor: pointer; }
         #quiz-app-container .correct-feedback { border: 2.5px solid var(--q-success) !important; background: rgba(46, 204, 113, 0.1); }
         #quiz-app-container .wrong-feedback { border: 2.5px solid var(--q-danger) !important; background: rgba(231, 76, 60, 0.1); }
-        #quiz-app-container .explanation { background: rgba(74, 144, 226, 0.1); padding: 10px; border-radius: 6px; margin-top: 10px; border-left: 4px solid var(--q-primary); font-size: 0.9rem; }
+        #quiz-app-container .explanation { background: rgba(74, 144, 226, 0.1); padding: 10px; border-radius: 6px; margin-top: 10px; border-left: 4px solid var(--q-primary); }
         #quiz-app-container .question-image { max-width: 100%; border-radius: 8px; margin: 10px 0; display: block; }
-        #quiz-app-container pre { background: #222; color: #eee; padding: 10px; border-radius: 5px; font-size: 0.8rem; overflow-x: auto; }
         #quiz-app-container .history-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
-        #quiz-app-container .history-table th, #quiz-app-container .history-table td { text-align: left; padding: 8px; border-bottom: 1px solid var(--q-border); }
+        #quiz-app-container .history-table td { padding: 8px; border-bottom: 1px solid var(--q-border); }
     </style>
 
-    <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
-        <button class="btn btn-primary" onclick="toggleQuizTheme()">🌓 Modo Oscuro</button>
+    <div id="quiz-app-inner">
+        <section id="q-view-setup" class="card">
+            <h3>1. Cargar Banco de Preguntas</h3>
+            <div id="q-drop-zone" class="upload-area">
+                <p>Arrastra archivos .json aquí o haz clic</p>
+                <input type="file" id="q-fileInput" multiple accept=".json" class="hidden">
+            </div>
+
+            <div id="q-setup-options" class="hidden">
+                <div id="q-bank-list" style="margin: 1.5rem 0;"></div>
+                <hr>
+                <h3>2. Configuración</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 1rem;">
+                    <div>
+                        <label>Evaluación:</label>
+                        <select id="q-eval-mode" onchange="toggleQuizEvalUI()" style="width:100%; padding: 5px;">
+                            <option value="threshold">Apto / No Apto</option>
+                            <option value="scoring">Puntuación (Oposición)</option>
+                        </select>
+                    </div>
+                    <div>
+                        Tiempo (min): <input type="number" id="q-time-limit" value="0" style="width: 50px;">
+                    </div>
+                </div>
+
+                <div id="q-ui-threshold" class="card" style="background: rgba(0,0,0,0.02);">
+                    Errores permitidos: <input type="number" id="q-max-errors" value="3" style="width: 40px;">
+                </div>
+                <div id="q-ui-scoring" class="card hidden" style="background: rgba(0,0,0,0.02);">
+                    Acierto: +<input type="number" id="q-pts-right" value="1" step="0.1" style="width:45px"> | 
+                    Fallo: -<input type="number" id="q-pts-wrong" value="0.33" step="0.01" style="width:45px">
+                </div>
+
+                <div style="margin: 1rem 0; font-size: 0.9rem;">
+                    <label><input type="checkbox" id="q-sudden-death"> 💀 Muerte Súbita</label> &nbsp;
+                    <label><input type="checkbox" id="q-instant-feedback"> ⚡ Feedback Inmediato</label>
+                </div>
+                <button class="btn btn-success" onclick="startQuizMaster()">EMPEZAR EXAMEN</button>
+            </div>
+
+            <div id="q-history-area" style="margin-top: 2rem;">
+                <h4>Últimos resultados</h4>
+                <table class="history-table"><tbody id="q-history-body"></tbody></table>
+            </div>
+        </section>
+
+        <section id="q-view-quiz" class="hidden">
+            <div class="stats-bar">
+                <div id="q-timer">Tiempo: --:--</div>
+                <div id="q-progress">Examen en curso</div>
+            </div>
+            <div id="q-content"></div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-success" style="flex: 2;" onclick="finishQuizMaster()">Corregir</button>
+                <button class="btn btn-danger" style="flex: 1;" onclick="abortQuizMaster()">Abandonar</button>
+            </div>
+        </section>
+
+        <section id="q-view-results" class="card hidden" style="text-align: center;">
+            <div id="q-star-display" style="font-size: 3rem;"></div>
+            <h2 id="q-result-title"></h2>
+            <p id="q-result-desc"></p>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="backToQuizSetup()">Volver</button>
+                <button class="btn btn-success" onclick="exportQuizTxt()">📥 Descargar TXT</button>
+            </div>
+        </section>
     </div>
 
-    <section id="q-view-setup" class="card">
-        <details style="margin-bottom: 1.5rem;">
-            <summary style="cursor:pointer; color: var(--q-primary); font-weight: bold;">ℹ️ Ver formato JSON aceptado</summary>
-            <pre>
-{
-  "tema": "Título del Test",
-  "preguntas": [{
-    "pregunta": "¿Texto de la pregunta?",
-    "opciones": ["Opción A", "Opción B", "Opción C"],
-    "correcta": 1,             // Índice (0, 1, 2...)
-    "multiple": false,        // (Opcional) true si hay varias correctas
-    "imagen": "URL",           // (Opcional)
-    "explicacion": "Texto"    // (Opcional)
-  }]
-}</pre>
-        </details>
-
-        <h3>1. Cargar Banco de Preguntas</h3>
-        <div id="q-drop-zone" class="upload-area">
-            <p>Arrastra archivos .json aquí o haz clic</p>
-            <input type="file" id="q-fileInput" multiple accept=".json" class="hidden">
-        </div>
-
-        <div id="q-setup-options" class="hidden">
-            <div id="q-bank-list" style="margin: 1.5rem 0;"></div>
-            <hr>
-            <h3>2. Configuración</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 1rem;">
-                <div>
-                    <label>Evaluación:</label>
-                    <select id="q-eval-mode" onchange="toggleQuizEvalUI()" style="width:100%; padding: 5px;">
-                        <option value="threshold">Apto / No Apto</option>
-                        <option value="scoring">Puntuación (Oposición)</option>
-                    </select>
-                </div>
-                <div>
-                    Tiempo (min): <input type="number" id="q-time-limit" value="0" style="width: 50px;">
-                </div>
-            </div>
-
-            <div id="q-ui-threshold" class="card" style="background: rgba(0,0,0,0.02);">
-                Errores permitidos: <input type="number" id="q-max-errors" value="3" style="width: 40px;">
-            </div>
-            <div id="q-ui-scoring" class="card hidden" style="background: rgba(0,0,0,0.02);">
-                Acierto: +<input type="number" id="q-pts-right" value="1" step="0.1" style="width:45px"> | 
-                Fallo: -<input type="number" id="q-pts-wrong" value="0.33" step="0.01" style="width:45px">
-            </div>
-
-            <div style="margin: 1rem 0; font-size: 0.9rem;">
-                <label><input type="checkbox" id="q-sudden-death"> 💀 Muerte Súbita</label> &nbsp;
-                <label><input type="checkbox" id="q-instant-feedback"> ⚡ Feedback Inmediato</label>
-            </div>
-            <button class="btn btn-success" onclick="startQuizMaster()">EMPEZAR EXAMEN</button>
-        </div>
-
-        <div id="q-history-area" style="margin-top: 2rem;">
-            <h4>Últimos resultados</h4>
-            <table class="history-table">
-                <tbody id="q-history-body"></tbody>
-            </table>
-        </div>
-    </section>
-
-    <section id="q-view-quiz" class="hidden">
-        <div class="stats-bar">
-            <div id="q-timer">Tiempo: --:--</div>
-            <div id="q-progress">Examen en curso</div>
-        </div>
-        <div id="q-content"></div>
-        <div style="display: flex; gap: 10px; margin-top: 20px;">
-            <button class="btn btn-success" style="flex: 2;" onclick="finishQuizMaster()">Corregir Examen</button>
-            <button class="btn btn-danger" style="flex: 1;" onclick="abortQuizMaster()">Abandonar</button>
-        </div>
-    </section>
-
-    <section id="q-view-results" class="card hidden" style="text-align: center;">
-        <div id="q-star-display" style="font-size: 3rem;"></div>
-        <h2 id="q-result-title"></h2>
-        <p id="q-result-desc"></p>
-        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 2rem;">
-            <button class="btn btn-primary" onclick="backToQuizSetup()">Volver</button>
-            <button class="btn btn-success" onclick="exportQuizTxt()">📥 Descargar Informe TXT</button>
-        </div>
-    </section>
-
     <script>
+        /* La lógica de JavaScript se mantiene igual, solo eliminamos la función toggleQuizTheme */
         let qBank = []; let qActive = []; let qTimer = null; let qTimeLeft = 0; let qResultsData = [];
         let qHistory = JSON.parse(localStorage.getItem('quiz_h_data') || '[]');
 
@@ -191,8 +188,10 @@
         function updateQuizClock() {
             qTimeLeft--;
             const m = Math.floor(qTimeLeft/60), s = qTimeLeft%60;
-            document.getElementById('q-timer').innerText = `Tiempo: ${m}:${s<10?'0':''}${s}`;
-            if(qTimeLeft <= 0) finishQuizMaster();
+            const display = document.getElementById('q-timer');
+            display.innerText = `Tiempo: ${m}:${s<10?'0':''}${s}`;
+            if(qTimeLeft <= 30) display.style.color = "var(--q-danger)";
+            if(qTimeLeft <= 0) { clearInterval(qTimer); finishQuizMaster(); }
         }
 
         function renderQuizContent() {
@@ -216,7 +215,7 @@
             const isC = qActive[i].oM[sel.value].isC;
             document.getElementById(`qc-${i}`).style.borderLeft = isC ? "6px solid var(--q-success)" : "6px solid var(--q-danger)";
             if(qActive[i].explicacion) document.getElementById(`qe-${i}`).classList.remove('hidden');
-            if(!isC && document.getElementById('q-sudden-death').checked) { alert("💀 Muerte Súbita!"); finishQuizMaster(); }
+            if(!isC && document.getElementById('q-sudden-death').checked) { alert("💀 ¡Muerte Súbita!"); finishQuizMaster(); }
         }
 
         function abortQuizMaster() { if(confirm("¿Abandonar examen?")) { clearInterval(qTimer); backToQuizSetup(); } }
@@ -266,20 +265,8 @@
         }
 
         function updateQuizHistoryUI() {
-            document.getElementById('q-history-body').innerHTML = qHistory.map(x => `<tr><td>${x.d}</td><td>${x.r}</td></tr>`).join('');
-        }
-
-        function exportQuizTxt() {
-            let t = "INFORME\n\n";
-            qResultsData.forEach((r, i) => t += `${i+1}. ${r.q}\n   ${r.ok?'OK':'FALLO'}\n   Tuya: ${r.u.join(', ')}\n   Correcta: ${r.c.join(', ')}\n\n`);
-            const b = new Blob([t], { type: 'text/plain' });
-            const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = "informe.txt"; a.click();
-        }
-
-        function toggleQuizTheme() {
-            const c = document.getElementById('quiz-app-container');
-            const isD = c.getAttribute('data-theme') === 'dark';
-            c.setAttribute('data-theme', isD ? 'light' : 'dark');
+            const body = document.getElementById('q-history-body');
+            if(body) body.innerHTML = qHistory.map(x => `<tr><td>${x.d}</td><td>${x.r}</td></tr>`).join('');
         }
 
         function toggleQuizEvalUI() {
@@ -293,6 +280,13 @@
             document.getElementById('q-view-quiz').classList.add('hidden');
             document.getElementById('q-view-setup').classList.remove('hidden');
             window.scrollTo(0, 0);
+        }
+
+        function exportQuizTxt() {
+            let t = "INFORME\n\n";
+            qResultsData.forEach((r, i) => t += `${i+1}. ${r.q}\n   ${r.ok?'OK':'FALLO'}\n   Tuya: ${r.u.join(', ')}\n   Correcta: ${r.c.join(', ')}\n\n`);
+            const b = new Blob([t], { type: 'text/plain' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = "informe.txt"; a.click();
         }
     </script>
 </div>
